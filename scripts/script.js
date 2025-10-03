@@ -48,26 +48,28 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     const home = +this.home.value;
     const apartment = +this.apartment.value;
 
-    if (!validateString(lastName)) console.log("Ошибка: Фамилия некорректна");
-    if (!validateString(firstName)) console.log("Ошибка: Имя некорректно");
-    if (!validateString(middleName)) console.log("Ошибка: Отчество некорректно")
-    if (!validateNumber(numberPhone)) console.log("Ошибка: номер некорректен");
-    if (!validateNumber(index)) console.log("Ошибка: индекс некорректен")
-    if (!validateString(country)) console.log("Ошибка: Страна некорректна");
-    if (!validateString(city)) console.log("Ошибка: Город некорректен");
-    if (!validateString(region)) console.log("Ошибка: Регион некорректен");
-    if (!validateString(street)) console.log("Ошибка: Улица некорректна");
-    if (!validateNumber(home)) console.log("Ошибка: Номер дома некорректен");
-    if (!validateNumber(apartment)) console.log("Ошибка: Номер квартиры некорректен");
+    if (!validateString(lastName)) console.error("Ошибка: Фамилия некорректна");
+    if (!validateString(firstName)) console.error("Ошибка: Имя некорректно");
+    if (!validateString(middleName)) console.error("Ошибка: Отчество некорректно")
+    if (!validateNumber(numberPhone)) console.error("Ошибка: номер некорректен");
+    if (!validateNumber(index)) console.error("Ошибка: индекс некорректен")
+    if (!validateString(country)) console.error("Ошибка: Страна некорректна");
+    if (!validateString(city)) console.error("Ошибка: Город некорректен");
+    if (!validateString(region)) console.error("Ошибка: Регион некорректен");
+    if (!validateString(street)) console.error("Ошибка: Улица некорректна");
+    if (!validateNumber(home)) console.error("Ошибка: Номер дома некорректен");
+    if (!validateNumber(apartment)) console.error("Ошибка: Номер квартиры некорректен");
 
-
-    let UserPhone = new PhoneUser(
-        lastName, firstName, middleName, numberPhone,
-        index, country, city, region, street, home, apartment
-    );
-
-    PhoneUserArray.push(UserPhone);
-    localStorage.setItem("PhoneUserArray", JSON.stringify(PhoneUserArray));
+    if (validateString(lastName)&&validateString(firstName)&&validateString(middleName)&&validateNumber(numberPhone)&&
+        validateNumber(index)&& validateString(country)&&validateNumber(city)&&validateNumber(street)&&validateNumber(home)&&
+        validateNumber(apartment)) {
+        let UserPhone = new PhoneUser(
+            lastName, firstName, middleName, numberPhone,
+            index, country, city, region, street, home, apartment
+        );
+        PhoneUserArray.push(UserPhone);
+        localStorage.setItem("PhoneUserArray", JSON.stringify(PhoneUserArray));
+    }
 
     showPhoneUser(PhoneUserArray)
     this.querySelector("#clearButton").addEventListener("click", function clearButton () {
