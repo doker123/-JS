@@ -39,7 +39,7 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     const lastName = this.lastName.value;
     const firstName = this.firstName.value;
     const middleName = this.middleName.value;
-    const numberPhone = +this.numberPhone.value;
+    const numberPhone = this.numberPhone.value;
     const index = +this.index.value;
     const country = this.country.value;
     const city = this.city.value;
@@ -51,7 +51,7 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     if (!validateString(lastName)) console.error("Ошибка: Фамилия некорректна");
     if (!validateString(firstName)) console.error("Ошибка: Имя некорректно");
     if (!validateString(middleName)) console.error("Ошибка: Отчество некорректно")
-    if (!validateNumber(numberPhone)) console.error("Ошибка: номер некорректен");
+    if (!validateString(numberPhone)) console.error("Ошибка: номер некорректен");
     if (!validateNumber(index)) console.error("Ошибка: индекс некорректен")
     if (!validateString(country)) console.error("Ошибка: Страна некорректна");
     if (!validateString(city)) console.error("Ошибка: Город некорректен");
@@ -60,9 +60,19 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     if (!validateNumber(home)) console.error("Ошибка: Номер дома некорректен");
     if (!validateNumber(apartment)) console.error("Ошибка: Номер квартиры некорректен");
 
-    if (validateString(lastName)&&validateString(firstName)&&validateString(middleName)&&validateNumber(numberPhone)&&
-        validateNumber(index)&& validateString(country)&&validateNumber(city)&&validateNumber(street)&&validateNumber(home)&&
-        validateNumber(apartment)) {
+    if (
+        validateString(lastName) &&
+        validateString(firstName) &&
+        validateString(middleName) &&
+        validateString(numberPhone) &&
+        validateNumber(index) &&
+        validateString(country) &&
+        validateString(city) &&       // ← строка!
+        validateString(region) &&     // ← строка!
+        validateString(street) &&     // ← строка!
+        validateNumber(home) &&
+        validateNumber(apartment)
+    ) {
         let UserPhone = new PhoneUser(
             lastName, firstName, middleName, numberPhone,
             index, country, city, region, street, home, apartment
@@ -72,7 +82,35 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     }
 
     showPhoneUser(PhoneUserArray)
-    this.querySelector("#clearButton").addEventListener("click", function clearButton () {
-        localStorage.removeItem("PhoneUserArray");
-    })
 });
+document.getElementById("clearButton").addEventListener("click", function() {
+    localStorage.removeItem("PhoneUserArray");
+    PhoneUserArray = [];
+    console.log("Данные очищены");
+    showPhoneUser(PhoneUserArray);
+
+});
+
+function findUsersByProperty(property, value) {
+    let result = [];
+
+    PhoneUserArray.forEach(user => {
+        if (user[property] && String(user[property]).toLowerCase() === String(value).toLowerCase()) {
+            result.push(user);
+        }
+        else if (user.address && user.address[property] &&
+        String(user.address[property]).toLowerCase() === String(value).toLowerCase()) {
+            result.push(user);
+        }
+    });
+
+    if (result.length > 0) {
+        console.log(`Найдено ${result.length} совпадений:`);
+        console.log(result);
+    } else {
+        console.log("Совпадений не найдено")
+    }
+
+}
+
+findUsersByProperty("lastName", "Тулупов")
