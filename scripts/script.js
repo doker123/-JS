@@ -67,9 +67,9 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
         validateString(numberPhone) &&
         validateNumber(index) &&
         validateString(country) &&
-        validateString(city) &&       // ← строка!
-        validateString(region) &&     // ← строка!
-        validateString(street) &&     // ← строка!
+        validateString(city) &&
+        validateString(region) &&
+        validateString(street) &&
         validateNumber(home) &&
         validateNumber(apartment)
     ) {
@@ -112,5 +112,8 @@ function findUsersByProperty(property, value) {
     }
 
 }
-
-findUsersByProperty("lastName", "Тулупов")
+if (PhoneUserArray.length >= 2) {
+    let lastName = prompt("Введите параметр поиска: ")
+    let parameter = prompt("Введите значение параметра: ")
+    findUsersByProperty(lastName, parameter);
+}
