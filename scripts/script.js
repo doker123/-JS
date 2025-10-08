@@ -8,26 +8,26 @@ function PhoneUser(lastName, firstName,middleName,numberPhone,index, country, ci
 
 function showPhoneUser(user) {
     user.forEach((user) => {
-        console.log("Фамилия: ", user.lastName,"Имя: ",
-            user.firstName,"Отчество: ",user.middleName,"Номер телефона: ", user.numberPhone,
-            "Индекс: ", user.address.index,"Страна: ", user.address.country,
-            "Область: ",user.address.region,"Улица: ",user.address.street,
-            "Номер дома: ",user.address.home, "Номер квартире: ",user.address.apartment);
+        console.log("Фамилия: ", user.lastName,
+                    "Имя: ", user.firstName,
+                    "Отчество: ", user.middleName,
+                    "Индекс: ", user.address.index,
+                    "Страна: ", user.address.country,
+                    "Город: ", user.address.city,
+                    "Область: ", user.address.region,
+                    "Улица: ", user.address.street,
+                    "Дом: ", user.address.home,
+                    "Квартира: ", user.address.apartment,
+                    );
     })
 }
 
 function validateString(str) {
     const s = str.trim();
-    if (s === "" || s.toLowerCase() === "неизвестно" || s.toLowerCase() === "undefined" ||s.toLowerCase() === "null") {
-        return false;
-    }
-    return true;
+    return !(s === "" || s.toLowerCase() === "неизвестно" || s.toLowerCase() === "undefined" || s.toLowerCase() === "null");
 }
 function validateNumber(num){
-    if(isNaN(num) || num <= 0){
-        return false;
-    }
-    return true;
+    return !(isNaN(num) || num <= 0);
 }
 
 
@@ -48,30 +48,11 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
     const home = +this.home.value;
     const apartment = +this.apartment.value;
 
-    if (!validateString(lastName)) console.error("Ошибка: Фамилия некорректна");
-    if (!validateString(firstName)) console.error("Ошибка: Имя некорректно");
-    if (!validateString(middleName)) console.error("Ошибка: Отчество некорректно")
-    if (!validateString(numberPhone)) console.error("Ошибка: номер некорректен");
-    if (!validateNumber(index)) console.error("Ошибка: индекс некорректен")
-    if (!validateString(country)) console.error("Ошибка: Страна некорректна");
-    if (!validateString(city)) console.error("Ошибка: Город некорректен");
-    if (!validateString(region)) console.error("Ошибка: Регион некорректен");
-    if (!validateString(street)) console.error("Ошибка: Улица некорректна");
-    if (!validateNumber(home)) console.error("Ошибка: Номер дома некорректен");
-    if (!validateNumber(apartment)) console.error("Ошибка: Номер квартиры некорректен");
 
     if (
-        validateString(lastName) &&
-        validateString(firstName) &&
-        validateString(middleName) &&
-        validateString(numberPhone) &&
-        validateNumber(index) &&
-        validateString(country) &&
-        validateString(city) &&
-        validateString(region) &&
-        validateString(street) &&
-        validateNumber(home) &&
-        validateNumber(apartment)
+        validateString(lastName) && validateString(firstName) && validateString(middleName) &&
+        validateString(numberPhone) && validateNumber(index) && validateString(country) && validateString(city) &&
+        validateString(region) && validateString(street) && validateNumber(home) && validateNumber(apartment)
     ) {
         let UserPhone = new PhoneUser(
             lastName, firstName, middleName, numberPhone,
@@ -79,9 +60,9 @@ document.getElementById("formUser").addEventListener('submit', function(event) {
         );
         PhoneUserArray.push(UserPhone);
         localStorage.setItem("PhoneUserArray", JSON.stringify(PhoneUserArray));
+        showPhoneUser(PhoneUserArray)
     }
 
-    showPhoneUser(PhoneUserArray)
 });
 document.getElementById("clearButton").addEventListener("click", function() {
     localStorage.removeItem("PhoneUserArray");
@@ -103,17 +84,23 @@ function findUsersByProperty(property, value) {
             result.push(user);
         }
     });
-
     if (result.length > 0) {
         console.log(`Найдено ${result.length} совпадений:`);
         console.log(result);
     } else {
         console.log("Совпадений не найдено")
     }
-
 }
 if (PhoneUserArray.length >= 2) {
     let lastName = prompt("Введите параметр поиска: ")
     let parameter = prompt("Введите значение параметра: ")
     findUsersByProperty(lastName, parameter);
+}
+let choice = +prompt("Введите номер функции")
+switch (choice) {
+    case 1:
+        console.log("Массив: ");
+        showPhoneUser(PhoneUserArray);
+        break;
+    case 2:
 }
