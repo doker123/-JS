@@ -5,73 +5,6 @@ function PhoneUser(lastName, firstName,middleName,numberPhone,index, country, ci
     this.address = {index: index, country: country,city:city, region: region, street: street, home: home, apartment: apartment,};
     this.numberPhone = numberPhone;
 }
-
-function showPhoneUser(user) {
-    user.forEach((user) => {
-        console.log("Фамилия: ", user.lastName,
-                    "Имя: ", user.firstName,
-                    "Отчество: ", user.middleName,
-                    "Индекс: ", user.address.index,
-                    "Страна: ", user.address.country,
-                    "Город: ", user.address.city,
-                    "Область: ", user.address.region,
-                    "Улица: ", user.address.street,
-                    "Дом: ", user.address.home,
-                    "Квартира: ", user.address.apartment,
-                    );
-    })
-}
-
-function validateString(str) {
-    const s = str.trim();
-    return !(s === "" || s.toLowerCase() === "неизвестно" || s.toLowerCase() === "undefined" || s.toLowerCase() === "null");
-}
-function validateNumber(num){
-    return !(isNaN(num) || num <= 0);
-}
-
-
-let PhoneUserArray = JSON.parse(localStorage.getItem("PhoneUserArray") || "[]");
-
-document.getElementById("formUser").addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const lastName = this.lastName.value;
-    const firstName = this.firstName.value;
-    const middleName = this.middleName.value;
-    const numberPhone = this.numberPhone.value;
-    const index = +this.index.value;
-    const country = this.country.value;
-    const city = this.city.value;
-    const region = this.region.value;
-    const street = this.street.value;
-    const home = +this.home.value;
-    const apartment = +this.apartment.value;
-
-
-    if (
-        validateString(lastName) && validateString(firstName) && validateString(middleName) &&
-        validateString(numberPhone) && validateNumber(index) && validateString(country) && validateString(city) &&
-        validateString(region) && validateString(street) && validateNumber(home) && validateNumber(apartment)
-    ) {
-        let UserPhone = new PhoneUser(
-            lastName, firstName, middleName, numberPhone,
-            index, country, city, region, street, home, apartment
-        );
-        PhoneUserArray.push(UserPhone);
-        localStorage.setItem("PhoneUserArray", JSON.stringify(PhoneUserArray));
-        showPhoneUser(PhoneUserArray)
-    }
-
-});
-document.getElementById("clearButton").addEventListener("click", function() {
-    localStorage.removeItem("PhoneUserArray");
-    PhoneUserArray = [];
-    console.log("Данные очищены");
-    showPhoneUser(PhoneUserArray);
-
-});
-
 function findUsersByProperty(property, value) {
     let result = [];
 
@@ -80,7 +13,7 @@ function findUsersByProperty(property, value) {
             result.push(user);
         }
         else if (user.address && user.address[property] &&
-        String(user.address[property]).toLowerCase() === String(value).toLowerCase()) {
+            String(user.address[property]).toLowerCase() === String(value).toLowerCase()) {
             result.push(user);
         }
     });
@@ -91,16 +24,47 @@ function findUsersByProperty(property, value) {
         console.log("Совпадений не найдено")
     }
 }
-if (PhoneUserArray.length >= 2) {
-    let lastName = prompt("Введите параметр поиска: ")
-    let parameter = prompt("Введите значение параметра: ")
-    findUsersByProperty(lastName, parameter);
+function showArray (array) {
+    console.log(array);
 }
-let choice = +prompt("Введите номер функции")
-switch (choice) {
-    case 1:
-        console.log("Массив: ");
-        showPhoneUser(PhoneUserArray);
-        break;
-    case 2:
+function validateString(str) {
+    const s = str.trim();
+    return !(s === "" || s.toLowerCase() === "неизвестно" || s.toLowerCase() === "undefined" || s.toLowerCase() === "null");
 }
+function validateNumber(num){
+    return !(isNaN(num) || num <= 0);
+}
+
+let phoneUserArray = [];
+function inputPhoneUser (array) {
+    let lastName = prompt(`Введите фамилию пользователя`,"Иванов")
+    let firstName = prompt(`Введите имя пользователя`,'Иван')
+    let middleName = prompt(`Введите отчество пользователя`, 'Иваныч')
+    let numberPhone = prompt(`Введите номер телефона пользователя`,'79999999999')
+    let index = +prompt(`Введите индекс пользователя`, '999999')
+    let country = prompt(`Введите страну пользователя`, 'Россия')
+    let city = prompt("Введите город проживания", "Томск")
+    let region = prompt(`Введите регион пользователя`, 'Московская область')
+    let street = prompt(`Введите улицу пользователя`, 'Улица Пушкина')
+    let home = +prompt(`Введите номер дома пользователя`, '72')
+    let apartment = +prompt('Введите номер квартиры', '55')
+    if (validateString(lastName) && validateString(firstName) && validateString(middleName) &&
+     validateString(numberPhone) && validateNumber(index) && validateString(country) &&
+    validateString(region) && validateString(street) && validateNumber(home) && validateNumber(apartment))
+    {
+        let user = new PhoneUser(lastName, firstName, middleName, numberPhone,
+            index, country, city, region, street, home, apartment);
+
+        phoneUserArray.push(user);
+    }
+}
+
+function phoneUserInputQuestion(){
+    do {
+        inputPhoneUser(phoneUserArray);
+    } while (confirm("Хатите ли ввести ещё пользователя?"))
+
+}
+
+phoneUserInputQuestion();
+showArray(phoneUserArray);
