@@ -6,7 +6,21 @@ function PhoneUser(lastName, firstName,middleName,numberPhone,index, country, ci
     this.numberPhone = numberPhone;
 }
 function showArray (array) {
-    console.log(array);
+    for (let user of array) {
+        showPhoneUser(user);
+    }
+}
+function showPhoneUser(user) {
+    console.log(`Фамилия: ${user.lastName}\n`,
+        `Имя: ${user.firstName}\n`,
+        `Отчество: ${user.middleName}\n`,
+        `Номер телефона: ${user.numberPhone}\n`,
+        `Индекс: ${user.address.index}\n`,
+        `Страна: ${user.address.country}\n`,
+        `Область: ${user.address.region}\n`,
+        `Улица: ${user.address.street}\n`,
+        `Номер дома: ${user.address.home}\n`,
+        `Номер квартире: ${user.address.apartment}\n`);
 }
 function validateString(str) {
     const s = str.trim();
@@ -96,45 +110,39 @@ function sortPhoneUsersByProperty(array, property) {
     });
 }
 
-while (true) {
-    let choice = +prompt("Выберите действие:\n" +
-        "1 - Ввод по количеству\n" +
-        "2 - Ввод с вопросом\n" +
-        "3 - Ввод до заданного значения поля\n" +
-        "4 - Поиск в массиве\n" +
-        "5 - Сортировка по полю\n" +
-        "0 - Выход");
-    if (choice === 0) {
+
+     let choice = +prompt("Выберите действие:\n" +
+         "1 - Ввод по количеству\n" +
+         "2 - Ввод с вопросом\n" +
+         "3 - Ввод до заданного значения поля\n" +
+         "4 - Поиск в массиве\n" +
+         "5 - Сортировка по полю\n");
+
+switch (choice) {
+    case 1: // Ввод с цифрой.
+        phoneUserInputNumber()
         break;
-    }
-    switch (choice) {
-        case 1: // Ввод с цифрой.
-            phoneUserInputNumber()
-            break;
 
-        case 2: // Ввод с вопросом продолжать ли ввод.
-            phoneUserInputQuestion();
-            break;
+    case 2: // Ввод с вопросом продолжать ли ввод.
+        phoneUserInputQuestion();
+        break;
 
-        case 3: // Ввод до заданного значение поля.
-            let property = prompt("Введите поле для поиска значения.");
-            let value = prompt("Введите значение который нужно искать.")
-            phoneUserInputSign(property, value);
-            break;
-        case 4: // Поиск в массиве пользователей по значению
-            let property1 = prompt("Введите поле поиска значения.")
-            let value1 = prompt("Введите значение которое надо найти.")
-            findUsersByProperty(property1, value1);
-            break
+    case 3: // Ввод до заданного значение поля.
+        let property = prompt("Введите поле для поиска значения.");
+        let value = prompt("Введите значение который нужно искать.")
+        phoneUserInputSign(property, value);
+        break;
+    case 4: // Поиск в массиве пользователей по значению
+        let property1 = prompt("Введите поле поиска значения.")
+        let value1 = prompt("Введите значение которое надо найти.")
+        findUsersByProperty(property1, value1);
+        break
 
-        case 5:
-            let  property2 = prompt("Введите значение по которому сортировать.")
-            sortPhoneUsersByProperty(phoneUserArray, property2);
-            break;
-
-        default:
-            alert("Ты вышел за диапазон цифр")
-    }
+    case 5:
+        let property2 = prompt("Введите значение по которому сортировать.")
+        sortPhoneUsersByProperty(phoneUserArray, property2);
+        break;
+    default:
+        alert("Ты вышел за диапазон цифр")
 }
-
 showArray(phoneUserArray);
